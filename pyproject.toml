@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "book-service"
+version = "0.0.0"
+description = "Service to work with books library"
+authors = ["Nosov Pavel <paul-36@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
