@@ -1,0 +1,69 @@
+version: "3.6"
+
+volumes:
+  static:
+  media:
+  nginx_conf:
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    volumes:
+      - ~/postgres_data/alteasy/:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1000m"
+        max-file: "5"
+
+  backend:
+    build: /mnt/hgfs/Dev/Alteasy/backend
+    image: alteasy_backend
+    container_name: alteasy_backend
+    depends_on:
+      - postgres
+    #    restart: always
+    env_file:
+      - ./app/.env
+    entrypoint: /entrypoint.sh
+    volumes:
+      - static:/app/static
+      - media:/app/media
+      - nginx_conf:/app/conf/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1000m"
+        max-file: "5"
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    container_name: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - static:/app/static
+      - media:/app/media
+      - nginx_conf:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1000m"
+        max-file: "5"
+
+  ui:
+    build: /home/pavel/AndroidStudioProjects/frontend/
+    image: ui_books
+    container_name: ui_books
+    ports:
+      - "9000:80"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1000m"
+        max-file: "5"

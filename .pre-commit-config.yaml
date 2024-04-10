@@ -1,0 +1,53 @@
+repos:
+  # Trailing-whitespace
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-docstring-first
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+  # Pyupgrade
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+      - id: pyupgrade
+        exclude: |
+          (?x)^(
+              app/pydantic_models/feedback.py|
+          )$
+        args: [--py311-plus]
+  # Isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+        args:
+          - --line-length=120
+  # Black
+  - repo: https://github.com/psf/black.git
+    rev: 24.2.0
+    hooks:
+      - id: black
+        name: black
+        args:
+          - --line-length=120
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --expand-star-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
+  # Prettier
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        args:
+          - --ignore-path
+          - .prettierignore
+        types_or: [markdown, dockerfile, dockerignore, gitignore, yaml]
